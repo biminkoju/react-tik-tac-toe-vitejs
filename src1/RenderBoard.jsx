@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Square } from './Square';
 import './index.css';
-export function RenderBoard() {
+
+export function RenderBoard({ xIsNext, squares, onPlay }) {
 	const [xIsNext, setXIsNext] = useState(true);
 	const [squares, setSquares] = useState(Array(9).fill(null));
 
@@ -29,7 +30,7 @@ export function RenderBoard() {
 		return null;
 	}
 	function handleClick(i) {
-		if (squares[i] || calculateWinner(squares)) {
+		if (calculateWinner(squares) || squares[i]) {
 			return;
 		}
 		const nextSquares = squares.slice();
@@ -38,8 +39,7 @@ export function RenderBoard() {
 		} else {
 			nextSquares[i] = 'O';
 		}
-		setXIsNext(!xIsNext);
-		setSquares(nextSquares);
+		onPlay(nextSquares);
 	}
 
 	const winner = calculateWinner(squares);
